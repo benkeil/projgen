@@ -35,7 +35,7 @@ You can configure `projgen` with a config file in `$HOME/.config/projgen/config.
 
 ### Config properties
 
-Not yet available`
+Not yet available
 
 ## Commands
 
