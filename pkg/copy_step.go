@@ -30,8 +30,8 @@ func Copy(src, dest string) error {
 	return CopyArgs(src, dest, "-rv")
 }
 
-func CopyA(src, dest string) error {
-	return CopyArgs(src, dest, "-rva")
+func CopyT(src, dest string) error {
+	return CopyArgs(src, dest, "-rvT")
 }
 
 func CopyArgs(src, dest, args string) error {

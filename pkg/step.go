@@ -33,5 +33,16 @@ func (step Step) Transform(params *Params) (ExecutableStep, error) {
 			Mkdir:  step.Mkdir,
 		}, nil
 	}
+	if step.CopyAll == true {
+		return CopyAllStep{
+			Params: params,
+		}, nil
+	}
+	if step.Render != "" {
+		return RenderStep{
+			Params: params,
+			File:   step.Render,
+		}, nil
+	}
 	return nil, errors.New(fmt.Sprintf("invalid step configuration: %v", step))
 }

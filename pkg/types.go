@@ -10,8 +10,10 @@ type Step struct {
 	Command string `yaml:"command"`
 	Title   string `yaml:"title"`
 	Copy    string `yaml:"copy"`
+	CopyAll bool   `yaml:"copyAll"`
 	To      string `yaml:"to"`
 	Mkdir   string `yaml:"mkdir"`
+	Render  string `yaml:"render"`
 }
 
 type Params struct {

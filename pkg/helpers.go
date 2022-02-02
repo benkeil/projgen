@@ -65,6 +65,42 @@ func ReadTemplateFile(path string) (*Template, error) {
 	return &template, nil
 }
 
+func GitInit(path string) error {
+	_, err := ExecuteCmdWorkingDirectory(path, true, "git", []string{"init"})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func Cleanup(path string) error {
+	configFile := filepath.Join(path, ".projgen.yaml")
+	configDirectory := filepath.Join(path, ".projgen/")
+	fmt.Println("Cleanup", configFile)
+	_, err := ExecuteCmd(true, "rm", []string{"-vf", configFile})
+	if err != nil {
+		return err
+	}
+	fmt.Println("Cleanup", configDirectory)
+	_, err = ExecuteCmd(true, "rm", []string{"-vrf", configDirectory})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GitCommit(path string) error {
+	_, err := ExecuteCmdWorkingDirectory(path, true, "git", []string{"add", "."})
+	if err != nil {
+		return err
+	}
+	_, err = ExecuteCmdWorkingDirectory(path, true, "git", []string{"commit", "-m", "chore: project created by projgen"})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 type InputParams struct {
 	ProjectPath string
 	ProjectName string
