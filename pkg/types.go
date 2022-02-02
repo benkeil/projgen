@@ -15,9 +15,8 @@ type Step struct {
 }
 
 type Params struct {
-	ProjectPath  string
-	TemplatePath string
-	ProjectName  string
-	DevRoot      string
-	VcsProvider  string
+	ProjectPath string
+	ProjectName string
+	DevRoot     string
+	VcsProvider string
 }

@@ -7,8 +7,9 @@ import (
 	"os/exec"
 )
 
-func ExecuteCmd(print bool, name string, args []string) (string, error) {
+func ExecuteCmd(workingDirectory string, print bool, name string, args []string) (string, error) {
 	cmd := exec.Command(name, args...)
+	cmd.Dir = workingDirectory
 	stdout, err := cmd.Output()
 	if err != nil {
 		return "", err

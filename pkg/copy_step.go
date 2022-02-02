@@ -17,7 +17,7 @@ type CopyStep struct {
 }
 
 func (step CopyStep) Execute() error {
-	src := filepath.Join(step.Params.TemplatePath, ".projgen", step.Copy)
+	src := filepath.Join(step.Params.ProjectPath, ".projgen", step.Copy)
 	dest := step.Copy
 	if step.To != "" {
 		dest = step.To
