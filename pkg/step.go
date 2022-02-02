@@ -23,14 +23,14 @@ func (step Step) Transform(params *Params) (ExecutableStep, error) {
 		return CopyStep{
 			Params: params,
 			Title:  step.Title,
-			Copy:   step.Copy,
-			To:     step.To,
+			Src:    step.Copy,
+			Dest:   step.To,
 		}, nil
 	}
 	if step.Mkdir != "" {
 		return MkdirStep{
 			Params: params,
-			Mkdir:  step.Mkdir,
+			Path:   step.Mkdir,
 		}, nil
 	}
 	if step.CopyAll == true {

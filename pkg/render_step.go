@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"os"
 	"path/filepath"
@@ -14,6 +15,7 @@ type RenderStep struct {
 
 func (step RenderStep) Execute() error {
 	file := filepath.Join(step.Params.ProjectPath, step.File)
+	fmt.Println("Render", step.File)
 	stat, err := os.Stat(file)
 	if err != nil {
 		return err

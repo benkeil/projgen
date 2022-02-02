@@ -1,6 +1,4 @@
 steps:
-  #  - command: mkdir $projectName
-  #  - command: cd $projectName
   - command: npm init -y
     title: generate package.json
   - command: pnpm i --save-dev typescript
@@ -28,5 +26,4 @@ steps:
     title: initialize typescript
   - command: pnpm i --save-dev eslint prettier
     title: add additional dependencies
-  - mkdir: dir
   - render: README.md

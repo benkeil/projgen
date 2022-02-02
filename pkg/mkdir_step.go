@@ -10,11 +10,11 @@ import (
 
 type MkdirStep struct {
 	Params *Params
-	Mkdir  string
+	Path   string
 }
 
 func (step MkdirStep) Execute() error {
-	path := filepath.Join(step.Params.ProjectPath, step.Mkdir)
+	path := filepath.Join(step.Params.ProjectPath, step.Path)
 	fmt.Printf("Create directory %s\n", path)
 	err := os.MkdirAll(path, os.ModePerm)
 	if err != nil {

@@ -12,17 +12,17 @@ import (
 type CopyStep struct {
 	Params *Params
 	Title  string
-	Copy   string
-	To     string
+	Src    string
+	Dest   string
 }
 
 func (step CopyStep) Execute() error {
-	src := filepath.Join(step.Params.ProjectPath, ".projgen", step.Copy)
-	dest := step.Copy
-	if step.To != "" {
-		dest = step.To
+	src := filepath.Join(step.Params.ProjectPath, ".projgen", step.Src)
+	dest := step.Src
+	if step.Dest != "" {
+		dest = step.Dest
 	}
-	fmt.Printf("Copy %s to %s\n", step.Copy, dest)
+	fmt.Printf("Src %s to %s\n", step.Src, dest)
 	return Copy(src, dest)
 }
 

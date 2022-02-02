@@ -4,6 +4,7 @@ package pkg
 
 import (
 	"fmt"
+	"github.com/MakeNowJust/heredoc"
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -101,20 +102,11 @@ func GitCommit(path string) error {
 	return nil
 }
 
-type InputParams struct {
-	ProjectPath string
-	ProjectName string
-	DevRoot     string
-	VcsProvider string
-}
-
-func ReadParams(input InputParams) (*Params, error) {
-	params := Params{
-		ProjectPath: input.ProjectPath,
-		ProjectName: input.ProjectName,
-		DevRoot:     input.DevRoot,
-		VcsProvider: input.VcsProvider,
+func Doc(text string) string {
+	doc := heredoc.Doc(text)
+	var result = ""
+	for _, line := range strings.Split(doc, "\n") {
+		result += fmt.Sprint("  ", line, "\n")
 	}
-	fmt.Printf("params: %+v\n", params)
-	return &params, nil
+	return strings.Trim(result, "\n")
 }

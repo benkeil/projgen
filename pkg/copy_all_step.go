@@ -14,6 +14,6 @@ type CopyAllStep struct {
 func (step CopyAllStep) Execute() error {
 	src := filepath.Join(step.Params.ProjectPath, ".projgen")
 	dest := step.Params.ProjectPath
-	fmt.Printf("Copy all files to %s\n", dest)
+	fmt.Printf("Src all files to %s\n", dest)
 	return CopyT(src, dest)
 }

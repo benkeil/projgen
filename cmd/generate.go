@@ -5,7 +5,6 @@ package cmd
 import (
 	"github.com/MakeNowJust/heredoc"
 	"github.com/benkeil/projgen/pkg"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	giturls "github.com/whilp/git-urls"
@@ -20,17 +19,17 @@ var vcsUser string
 
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
-	Use:   "generate",
-	Short: "Generate the new repository.",
-	Long:  `Generate the new repository.`,
-	Args:  cobra.ExactArgs(1),
-	Example: heredoc.Doc(`
-		to use a local directory
-		$ projgen generate templates/typescript -n my-project
-		to use a local repository
-		$ projgen generate templates/typescript -n my-project
+	Use:   "generate TEMPLATE",
+	Short: "Generates a new repository",
+	Long: heredoc.Doc(`
+		Generates a new repository from a template.
+	`),
+	Args: cobra.ExactArgs(1),
+	Example: pkg.Doc(`
+		to use a local directory or repository
+		$ projgen generate ./templates/typescript -n my-project
 		to use a remote repository
-		$ projgen generate git@github.com:user/project.git -n my-project
+		$ projgen generate git@github.com:user/template.git -n my-project
 	`),
 	PreRun: func(cmd *cobra.Command, args []string) {
 		if devRoot == "" {
@@ -41,10 +40,10 @@ var generateCmd = &cobra.Command{
 		}
 		if vcsUser == "" {
 			switch user := viper.GetString("vcs-user"); {
-			case user == "":
-				cobra.CheckErr(errors.New("vcs-user not set, use the --vcs-user flag or configure  it in your ~/.config/projgen/config.yaml"))
-			default:
+			case user != "":
 				vcsUser = user
+			default:
+				//cobra.CheckErr(errors.New("vcs-user not set, use the --vcs-user flag or configure  it in your ~/.config/projgen/config.yaml"))
 			}
 		}
 	},
@@ -69,13 +68,12 @@ var generateCmd = &cobra.Command{
 		template, err := pkg.ReadTemplateFile(args[0])
 		cobra.CheckErr(err)
 
-		params, err := pkg.ReadParams(pkg.InputParams{
+		params := &pkg.Params{
 			ProjectPath: projectPath,
 			ProjectName: projectName,
 			DevRoot:     devRoot,
 			VcsProvider: vcsProvider,
-		})
-		cobra.CheckErr(err)
+		}
 
 		for _, step := range template.Steps {
 			executableStep, err := step.Transform(params)
@@ -98,9 +96,9 @@ var generateCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(generateCmd)
 	generateCmd.Flags().StringVarP(&projectName, "project-name", "n", "", "The project name")
-	generateCmd.Flags().StringVarP(&devRoot, "dev-root", "r", "", "The development root directory")
-	generateCmd.Flags().StringVarP(&vcsProvider, "vcs-provider", "p", "", "The VCS provider")
-	generateCmd.Flags().StringVarP(&vcsUser, "vcs-user", "u", "", "The VCS user")
+	//generateCmd.Flags().StringVarP(&devRoot, "dev-root", "r", "", "The development root directory")
+	//generateCmd.Flags().StringVarP(&vcsProvider, "vcs-provider", "p", "", "The VCS provider")
+	//generateCmd.Flags().StringVarP(&vcsUser, "vcs-user", "u", "", "The VCS user")
 	generateCmd.MarkFlagRequired("project-name")
 	viper.BindPFlag("dev-root", generateCmd.Flags().Lookup("dev-root"))
 	viper.BindPFlag("vcs-provider", generateCmd.Flags().Lookup("vcs-provider"))
