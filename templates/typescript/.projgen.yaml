@@ -1,0 +1,33 @@
+steps:
+  #  - command: mkdir $projectName
+  #  - command: cd $projectName
+  - command: npm init -y
+    title: generate package.json
+  - command: pnpm i --save-dev typescript
+    title: install typescript
+  - command: >-
+      npx tsc --init
+      --baseUrl src
+      --outDir dist
+      --esModuleInterop true
+      --emitDecoratorMetadata false
+      --resolveJsonModule true
+      --allowUnreachableCode false
+      --alwaysStrict true
+      --noImplicitAny true
+      --noImplicitReturns true
+      --noImplicitThis true
+      --noUnusedLocals true
+      --noUnusedParameters true
+      --strict true
+      --strictFunctionTypes true
+      --strictNullChecks true
+      --target esnext
+      --lib esnext
+      --excludeDirectories node_modules
+    title: initialize typescript
+  - command: pnpm i --save-dev eslint prettier
+    title: add additional dependencies
+  - copy: .prettierrc.yaml
+  - copy: test
+  - mkdir: dir
