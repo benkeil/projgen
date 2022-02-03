@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"path/filepath"
-	"strings"
 )
 
 type CopyStep struct {
@@ -35,7 +34,6 @@ func CopyT(src, dest string) error {
 }
 
 func CopyArgs(src, dest, args string) error {
-	fmt.Println("gcp", strings.Join([]string{args, src, dest}, " "))
 	_, err := ExecuteCmd(true, "gcp", []string{args, src, dest})
 	if err != nil {
 		errors.Wrap(err, "could not copy files")

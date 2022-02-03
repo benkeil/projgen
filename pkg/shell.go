@@ -19,11 +19,12 @@ func ExecuteCmd(print bool, name string, args []string) (string, error) {
 	return string(stdout), nil
 }
 
-func ExecuteCmdWorkingDirectory(workingDirectory string, print bool, name string, args []string) (string, error) {
+func ExecuteCmdWorkingDirectory(workingDirectory string, print bool, name string, args ...string) (string, error) {
 	cmd := exec.Command(name, args...)
 	cmd.Dir = workingDirectory
-	stdout, err := cmd.Output()
+	stdout, err := cmd.CombinedOutput()
 	if err != nil {
+		fmt.Println(string(stdout))
 		return "", err
 	}
 	if print {

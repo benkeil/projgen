@@ -3,6 +3,7 @@ package pkg
 import (
 	"bytes"
 	"fmt"
+	"github.com/Masterminds/sprig"
 	"html/template"
 	"os"
 	"path/filepath"
@@ -15,7 +16,7 @@ type RenderStep struct {
 
 func (step RenderStep) Execute() error {
 	file := filepath.Join(step.Params.ProjectPath, step.File)
-	fmt.Println("Render", step.File)
+	fmt.Println(fmt.Sprintf("==> Render %s %+v", step.File, step.Params))
 	stat, err := os.Stat(file)
 	if err != nil {
 		return err
@@ -24,7 +25,7 @@ func (step RenderStep) Execute() error {
 	if err != nil {
 		return err
 	}
-	tmpl, err := template.New("render").Parse(string(data))
+	tmpl, err := template.New("render").Funcs(sprig.FuncMap()).Parse(string(data))
 	if err != nil {
 		return err
 	}

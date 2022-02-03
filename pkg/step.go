@@ -44,5 +44,23 @@ func (step Step) Transform(params *Params) (ExecutableStep, error) {
 			File:   step.Render,
 		}, nil
 	}
+	if step.Move != "" {
+		return MoveStep{
+			Params: params,
+			From:   step.Move,
+			To:     step.To,
+		}, nil
+	}
+	if step.MoveUp != "" {
+		return MoveUpStep{
+			Params: params,
+			From:   step.MoveUp,
+		}, nil
+	}
+	if step.Override {
+		return OverrideStep{
+			Params: params,
+		}, nil
+	}
 	return nil, errors.New(fmt.Sprintf("invalid step configuration: %v", step))
 }

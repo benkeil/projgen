@@ -5,6 +5,7 @@ package pkg
 import (
 	"bytes"
 	"fmt"
+	"github.com/Masterminds/sprig"
 	"html/template"
 	"regexp"
 )
@@ -17,7 +18,7 @@ type CommandStep struct {
 
 func (step CommandStep) Execute() error {
 	var title = step.Title
-	tmpl, err := template.New("command").Parse(step.Command)
+	tmpl, err := template.New("command").Funcs(sprig.FuncMap()).Parse(step.Command)
 	if err != nil {
 		return err
 	}
@@ -32,7 +33,7 @@ func (step CommandStep) Execute() error {
 	}
 	fmt.Printf("Execute '%s'\n", title)
 	parts := regexp.MustCompile("\\s+").Split(command, -1)
-	_, err = ExecuteCmdWorkingDirectory(step.Params.ProjectPath, true, parts[0], parts[1:])
+	_, err = ExecuteCmdWorkingDirectory(step.Params.ProjectPath, true, parts[0], parts[1:]...)
 	if err != nil {
 		return err
 	}

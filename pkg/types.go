@@ -3,17 +3,21 @@
 package pkg
 
 type Template struct {
-	Steps []Step `yaml:"steps"`
+	Overrides map[string]string `yaml:"overrides"`
+	Steps     []Step            `yaml:"steps"`
 }
 
 type Step struct {
-	Command string `yaml:"command"`
-	Title   string `yaml:"title"`
-	Copy    string `yaml:"copy"`
-	CopyAll bool   `yaml:"copyAll"`
-	To      string `yaml:"to"`
-	Mkdir   string `yaml:"mkdir"`
-	Render  string `yaml:"render"`
+	Command  string `yaml:"command"`
+	Title    string `yaml:"title"`
+	Copy     string `yaml:"copy"`
+	CopyAll  bool   `yaml:"copyAll"`
+	To       string `yaml:"to"`
+	Mkdir    string `yaml:"mkdir"`
+	Render   string `yaml:"render"`
+	Move     string `yaml:"move"`
+	MoveUp   string `yaml:"moveup"`
+	Override bool   `yaml:"override"`
 }
 
 type Params struct {

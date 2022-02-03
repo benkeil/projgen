@@ -3,13 +3,13 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/MakeNowJust/heredoc"
 	"github.com/benkeil/projgen/pkg"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	giturls "github.com/whilp/git-urls"
 	"os"
-	"path/filepath"
 )
 
 var projectName string
@@ -46,6 +46,21 @@ var generateCmd = &cobra.Command{
 				//cobra.CheckErr(errors.New("vcs-user not set, use the --vcs-user flag or configure  it in your ~/.config/projgen/config.yaml"))
 			}
 		}
+
+		params := &pkg.Params{
+			ProjectName: projectName,
+		}
+
+		projectTemplate, err := pkg.ReadRemoteTemplateFile(args[0])
+		cobra.CheckErr(err)
+
+		for key, value := range projectTemplate.Overrides {
+			newValue := pkg.OverrideParam(value, *params)
+			switch key {
+			case "ProjectName":
+				projectName = newValue
+			}
+		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		repository := args[0]
@@ -54,11 +69,14 @@ var generateCmd = &cobra.Command{
 
 		projectPath, err := pkg.CreateProject(projectName)
 		cobra.CheckErr(err)
+		fmt.Printf("create project from template at %v\n", projectPath)
 
 		stat, err := os.Stat(repository)
+		cobra.CheckErr(err)
+
 		switch mode := stat.Mode(); {
 		case mode.IsDir():
-			err = pkg.CopyT(filepath.Join(repository), projectPath)
+			err = pkg.CopyTemplate(repository, projectPath)
 			cobra.CheckErr(err)
 		default:
 			err = pkg.CloneTemplate(repository, projectPath)
@@ -82,10 +100,10 @@ var generateCmd = &cobra.Command{
 			cobra.CheckErr(err)
 		}
 
-		err = pkg.GitInit(projectPath)
+		err = pkg.Cleanup(projectPath)
 		cobra.CheckErr(err)
 
-		err = pkg.Cleanup(projectPath)
+		err = pkg.GitInit(projectPath)
 		cobra.CheckErr(err)
 
 		err = pkg.GitCommit(projectPath)
